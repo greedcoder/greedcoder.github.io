@@ -16,7 +16,7 @@
 先简单说说我们做的什么游戏吧，这是一个回合制的MMORPG手机网络游戏，迫于各种压力，策划层面上有很多机制都是模仿的猪厂某西游设计的，作为一个技术开发人员，对此我也不好多做评价。如今，上线没两个月，内容的雷同又匮乏，导致跨服战这样的功能被提上了议程。
 这次我们模仿的对象是某西游的剑会群雄这个跨服PK的功能，简单来说，就">
 <meta property="og:image" content="https://greedcoder.github.io/img/cc.png">
-<meta property="og:updated_time" content="2016-09-03T08:19:29.896Z">
+<meta property="og:updated_time" content="2016-09-07T13:22:22.942Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="游戏服务器跨服功能思考">
 <meta name="twitter:description" content="一款自己在公司做了一年的游戏两个月前已经上线了，目前处在一个稳步运营的状态中。
@@ -108,27 +108,18 @@
 <p>这次我们模仿的对象是某西游的剑会群雄这个跨服PK的功能，简单来说，就是有各个服务器上的玩家可以在一起，开房间，组队，和其他房间的队伍匹配打回合制的战斗，然后排行，奖励。</p>
 <a id="more"></a>
 <p>因为玩家来自各个不同的服务器，战斗逻辑又对各个玩家的数据（属性，装备，背包，宠物等等）有各种繁多的操作，所以，必须把一份跨服玩家数据的拷贝放在一个中介的跨服服务器中，以此让战斗逻辑计算处理在该服务器中进行。So，我的跨服功能将以下面这种方式最终部署（这里省去了为了部署服务器所需要的网关，代理，登录等服务器的部署情况）。</p>
-<pre><code>                             +------------------------+
-                             |                        |
-                             |                        |
-           +---------------&gt; |      cross server      | &lt;--------------+
-           |                 |                        |                |
-           |                 |                        |                |
-           |                 +------------------------+                |
-           |                                                           |
-           |                                                           |
-           |                                                           |
-           |                                                           |
-           |                                                           |
-+----------+-------------+                                +------------+------------+
-|                        |                                |                         |
-|                        |                                |                         |
-|                        |                                |                         |
-|     game server A      |                                |      game server B      |
-|                        |                                |                         |
-|                        |                                |                         |
-|                        |                                |                         |
-+------------------------+                                +-------------------------+
+<pre><code>                           +------------------------+
+                           |                        |
+           +-------------&gt; |      cross server      | &lt;--------------+
+           |               |                        |                |
+           |               +------------------------+                |
+           |                                                         |
+           |                                                         |
++----------+------------+                               +------------+-----------+
+|                       |                               |                        |
+|     game server A     |                               |      game server B     |
+|                       |                               |                        |
++-----------------------+                               +------------------------+
 </code></pre><p>结构其实很简单，只是在跨服的连接接入上，却又几种机制供我们研究和选择。这里，我们统一以一个客户端玩家player1由游戏服务器A跨服战斗遇到游戏服务器B的客户端玩家player2为例子，探讨一下以下的几种接入方式的利弊：</p>
 <ol>
 <li><p>客户端player1和客户端player2各自准备好跨服战斗后，服务器将他们的战斗必须的数据拷贝到cross server，然后cross server处理回合制战斗中各种技能施法、物品消耗等。在这个过程中，客户端依旧保持连接到各自原来的game server上，但所有的战斗交互操作都会转发到cross server上，cross server上处理完，在广播到战斗中的各个单位去。</p>
@@ -154,7 +145,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://greedcoder.github.io/2016/08/26/server-cross-structure/" data-id="cisr2yyem0006ocuj4ckp3qyr" class="article-share-link">Share</a>
+      <a data-url="https://greedcoder.github.io/2016/08/26/server-cross-structure/" data-id="cissxq740000250ujwkte9w53" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/服务器架构/">服务器架构</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/游戏设计/">游戏设计</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/程序设计/">程序设计</a></li></ul>
